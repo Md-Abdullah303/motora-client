@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google"
 import { Toaster } from "react-hot-toast"
+import ChatAssistant from "@/app/components/ChatAssistant"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
     >
       <body suppressHydrationWarning>
         {children}
+        <ChatAssistant />
         <Toaster
           position="top-right"
           toastOptions={{

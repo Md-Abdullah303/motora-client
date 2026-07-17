@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [isDemoLoading, setIsDemoLoading] = useState(false)
 
   const fillDemo = async () => {
-    const demoEmail = "mdabdulla0171594008test2@gmail.com"
+    const demoEmail = "mdabdulla01715940008test2@gmail.com"
     const demoPass = "1234Aqwer"
     setFormData(prev => ({ ...prev, email: demoEmail, password: demoPass }))
     setError(null)
@@ -46,6 +46,7 @@ export default function LoginPage() {
     }
     toast.success("Welcome! Logged in with demo account.")
     router.push("/")
+    router.refresh()
   }
 
   const handleGoogleLogin = async () => {
@@ -90,6 +91,7 @@ export default function LoginPage() {
 
     toast.success("Welcome back! Login successful.")
     router.push("/")
+    router.refresh()
   }
 
   return (

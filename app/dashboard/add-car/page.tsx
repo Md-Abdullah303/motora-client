@@ -21,7 +21,38 @@ export default function AddCarPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [aiText, setAiText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const { data: session } = authClient.useSession();
+
+  const generateAiDescription = async () => {
+    if (!formData.title) {
+      toast.error("Please enter a title first so AI knows what car to describe.");
+      return;
+    }
+
+    setIsGenerating(true);
+    const loadingToast = toast.loading("AI is writing description...");
+
+    try {
+      const res = await fetch("http://localhost:4000/api/ai/generate-description", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: formData.title, category: formData.category }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setFormData(prev => ({ ...prev, fullDescription: data.data.description }));
+        toast.success("Description generated!", { id: loadingToast });
+      } else {
+        throw new Error(data.message || "Failed to generate");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to generate description", { id: loadingToast });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -193,7 +224,18 @@ export default function AddCarPage() {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>FULL DESCRIPTION</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className={`${styles.label} mb-0`}>FULL DESCRIPTION</label>
+                <button
+                  type="button"
+                  onClick={generateAiDescription}
+                  disabled={isGenerating}
+                  className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#00D2FF]/20 to-[#0055FF]/20 px-3 py-1 text-xs font-bold text-[#00D2FF] border border-[#00D2FF]/30 hover:bg-[#00D2FF] hover:text-[#0B1120] transition-colors disabled:opacity-50"
+                >
+                  {isGenerating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                  {isGenerating ? "Generating..." : "Auto-generate with AI"}
+                </button>
+              </div>
               <textarea
                 name="fullDescription"
                 value={formData.fullDescription}
