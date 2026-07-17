@@ -175,8 +175,28 @@ export default function BrowseCarsPage() {
               </div>
 
               {loading ? (
-                <div className="flex h-64 items-center justify-center">
-                  <Loader2 className="h-8 w-8 animate-spin text-[#00D2FF]" />
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <div key={i} className="rounded-xl border border-white/5 bg-[#0e1629] overflow-hidden animate-pulse">
+                      {/* Image skeleton */}
+                      <div className="aspect-[4/3] bg-white/5" />
+                      {/* Badge skeleton */}
+                      <div className="p-4 space-y-3">
+                        <div className="h-3 w-20 rounded-full bg-white/10" />
+                        <div className="h-5 w-3/4 rounded bg-white/10" />
+                        <div className="h-3 w-1/2 rounded bg-white/10" />
+                        <div className="flex gap-3 pt-1">
+                          <div className="h-3 w-16 rounded bg-white/10" />
+                          <div className="h-3 w-16 rounded bg-white/10" />
+                          <div className="h-3 w-16 rounded bg-white/10" />
+                        </div>
+                        <div className="flex items-center justify-between pt-2">
+                          <div className="h-6 w-24 rounded bg-white/10" />
+                          <div className="h-8 w-28 rounded-lg bg-white/10" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : cars.length === 0 ? (
                 <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-white/5 bg-[#0e1629] text-center">
