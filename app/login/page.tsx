@@ -21,6 +21,32 @@ export default function LoginPage() {
     password: "",
     remember: false,
   })
+  const [isDemoLoading, setIsDemoLoading] = useState(false)
+
+  const fillDemo = async () => {
+    const demoEmail = "mdabdulla0171594008test2@gmail.com"
+    const demoPass = "1234Aqwer"
+    setFormData(prev => ({ ...prev, email: demoEmail, password: demoPass }))
+    setError(null)
+    setIsDemoLoading(true)
+    const loadingToast = toast.loading("Signing in with demo account...")
+
+    const { error: authError } = await authClient.signIn.email({
+      email: demoEmail,
+      password: demoPass,
+      rememberMe: false,
+    })
+
+    toast.dismiss(loadingToast)
+    setIsDemoLoading(false)
+
+    if (authError) {
+      toast.error(authError.message || "Demo login failed.")
+      return
+    }
+    toast.success("Welcome! Logged in with demo account.")
+    router.push("/")
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
@@ -209,6 +235,25 @@ export default function LoginPage() {
                 "Sign In"
               )}
             </Button>
+
+            {/* Demo Login */}
+            <button
+              type="button"
+              onClick={fillDemo}
+              disabled={isDemoLoading || isLoading}
+              className="w-full h-12 rounded-xl border-2 border-dashed border-yellow-400/50 bg-yellow-400/5 text-yellow-300 font-semibold text-sm hover:bg-yellow-400/10 hover:border-yellow-400/70 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              {isDemoLoading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Logging in as Demo...
+                </span>
+              ) : (
+                <>
+                  <span className="text-yellow-400">⚡</span> Demo Login (Auto-fill)
+                </>
+              )}
+            </button>
           </form>
 
           {/* Divider */}
