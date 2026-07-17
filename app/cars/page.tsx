@@ -118,12 +118,10 @@ export default function BrowseCarsPage() {
                       className="w-full bg-[#050914] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors appearance-none"
                     >
                       <option value="All Categories">All Categories</option>
-                      <option value="Supercar">Supercar</option>
                       <option value="Hypercar">Hypercar</option>
+                      <option value="Supercar">Supercar</option>
                       <option value="Sports Car">Sports Car</option>
-                      <option value="SUV">SUV</option>
-                      <option value="Sedan">Sedan</option>
-                      <option value="Electric">Electric</option>
+                      <option value="Luxury">Luxury</option>
                     </select>
                   </div>
 
