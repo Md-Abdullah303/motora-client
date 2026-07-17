@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   User,
   Mail,
@@ -11,6 +12,7 @@ import {
   EyeOff,
   Loader2,
 } from "lucide-react"
+import { authClient } from "@/app/lib/auth-client"
 
 function getPasswordStrength(password: string): {
   label: string
@@ -30,9 +32,11 @@ function getPasswordStrength(password: string): {
 }
 
 export default function SignUpPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,13 +51,39 @@ export default function SignUpPage() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+    if (error) setError(null)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.")
+      return
+    }
+
+    if (!formData.agreeTerms) {
+      setError("You must agree to the Terms of Service and Privacy Policy.")
+      return
+    }
+
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+
+    const { error: authError } = await authClient.signUp.email({
+      email: formData.email,
+      password: formData.password,
+      name: formData.name,
+    })
+
     setIsLoading(false)
+
+    if (authError) {
+      setError(authError.message || "Something went wrong. Please try again.")
+      return
+    }
+
+    router.push("/")
   }
 
   const strength = getPasswordStrength(formData.password)
@@ -96,6 +126,12 @@ export default function SignUpPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            {/* Error Message */}
+            {error && (
+              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                {error}
+              </div>
+            )}
             {/* Full Name */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">

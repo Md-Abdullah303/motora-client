@@ -3,15 +3,19 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
 import { Button } from "@/app/components/ui/Button"
 import { Input } from "@/app/components/ui/Input"
 import { cn } from "@/app/lib/utils"
+import { authClient } from "@/app/lib/auth-client"
 import loginSidebarImg from "@/app/loginSidebarImg.png"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,14 +28,28 @@ export default function LoginPage() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
+    if (error) setError(null)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setError(null)
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    const { error: authError } = await authClient.signIn.email({
+      email: formData.email,
+      password: formData.password,
+      rememberMe: formData.remember,
+    })
+
     setIsLoading(false)
+
+    if (authError) {
+      setError(authError.message || "Invalid email or password.")
+      return
+    }
+
+    router.push("/")
   }
 
   return (
@@ -82,6 +100,12 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+            {/* Error Message */}
+            {error && (
+              <div className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                {error}
+              </div>
+            )}
             {/* Email */}
             <div className="space-y-2">
               <label
