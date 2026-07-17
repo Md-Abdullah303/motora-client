@@ -28,6 +28,7 @@ export default function CarDetailsPage() {
   const { id } = params
   
   const [car, setCar] = useState<Car | null>(null)
+  const [loading, setLoading] = useState(true)
   const [activeImage, setActiveImage] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false)
   const { data: session } = authClient.useSession()
