@@ -6,6 +6,7 @@ import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Card, CardContent } from "./ui/Card"
 import Image from "next/image"
+import { motion } from "framer-motion"
 
 interface TrendingCar {
   _id: string
@@ -42,7 +43,13 @@ export default function TrendingCars() {
   return (
     <section id="cars" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center justify-between gap-4 sm:flex-row"
+        >
           <div>
             <h2 className="text-3xl font-bold text-white sm:text-4xl">
               Trending{" "}
@@ -55,7 +62,7 @@ export default function TrendingCars() {
           <Button variant="outline" className="gap-2 text-[#00D2FF] border-[#00D2FF]/30 hover:bg-[#00D2FF] hover:text-[#0B1120]">
             View All
           </Button>
-        </div>
+        </motion.div>
 
         {loading ? (
           <div className="flex h-64 items-center justify-center">
@@ -63,11 +70,17 @@ export default function TrendingCars() {
           </div>
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {cars.map((car) => (
-              <Card
+            {cars.map((car, index) => (
+              <motion.div
                 key={car._id}
-                className="group overflow-hidden border-white/5 bg-[#0e1629] transition-all duration-300 hover:border-[#00D2FF]/20 hover:shadow-lg hover:shadow-[#00D2FF]/5"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
+                <Card
+                  className="group overflow-hidden border-white/5 bg-[#0e1629] transition-all duration-300 hover:border-[#00D2FF]/20 hover:shadow-lg hover:shadow-[#00D2FF]/5"
+                >
                 <div className="relative h-48 w-full overflow-hidden bg-black/40">
                   {car.images && car.images[0] ? (
                     <Image 
@@ -117,6 +130,7 @@ export default function TrendingCars() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             ))}
           </div>
         )}

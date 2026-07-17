@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion } from "framer-motion"
 import { useSearchParams } from "next/navigation"
 import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
@@ -81,16 +82,26 @@ function BrowseCarsContent() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           {/* Header */}
-          <div className="mb-10 text-center md:text-left">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-10 text-center md:text-left"
+          >
             <h1 className="text-4xl font-black text-white md:text-5xl">Browse <span className="text-[#00D2FF]">Inventory</span></h1>
             <p className="mt-4 text-gray-400 max-w-2xl">
               Explore our curated selection of high-performance and luxury vehicles. Use the filters to find the perfect match for your lifestyle.
             </p>
-          </div>
+          </motion.div>
 
           <div className="flex flex-col gap-8 lg:flex-row">
             {/* Sidebar Filters */}
-            <aside className="w-full lg:w-72 shrink-0">
+            <motion.aside 
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="w-full lg:w-72 shrink-0"
+            >
               <div className="rounded-xl border border-white/5 bg-[#0e1629] p-6 sticky top-28">
                 <div className="flex items-center gap-2 mb-6 text-white font-bold uppercase tracking-wider text-sm border-b border-white/5 pb-4">
                   <Filter className="w-4 h-4 text-[#00D2FF]" />
@@ -158,9 +169,9 @@ function BrowseCarsContent() {
                   </button>
                 </div>
               </div>
-            </aside>
+            </motion.aside>
 
-            {/* Grid */}
+            {/* Results */}
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <span className="text-sm text-gray-400">
@@ -210,9 +221,15 @@ function BrowseCarsContent() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                    {cars.map((car) => (
-                      <div key={car._id} className="group flex flex-col rounded-xl border border-white/5 bg-[#0e1629] overflow-hidden hover:border-[#00D2FF]/30 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,210,255,0.05)]">
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {cars.map((car, index) => (
+                      <motion.div 
+                        key={car._id} 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.4, delay: index * 0.05 }}
+                        className="group flex flex-col rounded-xl border border-white/5 bg-[#0e1629] overflow-hidden hover:border-[#00D2FF]/30 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,210,255,0.05)]"
+                      >
                         <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
                           {car.images && car.images[0] ? (
                             <Image 
@@ -254,7 +271,7 @@ function BrowseCarsContent() {
                             </button>
                           </Link>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
 

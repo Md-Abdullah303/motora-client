@@ -6,6 +6,7 @@ import { Search, SlidersHorizontal, ArrowRight } from "lucide-react"
 import { Button } from "./ui/Button"
 import { Input } from "./ui/Input"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 const categories = ["All Categories", "Hypercar", "Supercar", "Sports Car", "Luxury"]
 
@@ -32,27 +33,47 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00D2FF]/20 bg-[#00D2FF]/5 px-4 py-1.5 text-xs font-medium text-[#00D2FF]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00D2FF]/20 bg-[#00D2FF]/5 px-4 py-1.5 text-xs font-medium text-[#00D2FF]"
+        >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00D2FF] opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00D2FF]" />
           </span>
           Powered by Agentic AI
-        </div>
+        </motion.div>
 
-        <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="max-w-4xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+        >
           Find Your Perfect{" "}
           <span className="bg-gradient-to-r from-[#00D2FF] to-[#0055FF] bg-clip-text text-transparent">
             Drive
           </span>
-        </h1>
+        </motion.h1>
 
-        <p className="mt-4 max-w-2xl text-base text-gray-400 sm:text-lg">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-4 max-w-2xl text-base text-gray-400 sm:text-lg"
+        >
           An AI-powered marketplace that learns your preferences and finds the
           ideal car. Smart search, instant matches, zero hassle.
-        </p>
+        </motion.p>
 
-        <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-8 flex flex-col items-center gap-4 sm:flex-row"
+        >
           <Link href="/cars">
             <Button size="lg" className="gap-2">
               Browse Cars
@@ -62,9 +83,14 @@ export default function HeroSection() {
           <Button variant="outline" size="lg">
             How It Works
           </Button>
-        </div>
+        </motion.div>
 
-        <div className="mt-12 w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0F1729]/60 p-4 backdrop-blur-xl sm:p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-12 w-full max-w-3xl rounded-2xl border border-white/10 bg-[#0F1729]/60 p-4 backdrop-blur-xl sm:p-6"
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div className="flex-1 space-y-2">
               <label className="text-xs font-medium text-gray-400">
@@ -116,9 +142,14 @@ export default function HeroSection() {
               <span className="hidden sm:inline">Search</span>
             </Button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="mt-8 flex items-center gap-6 text-sm text-gray-500">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mt-8 flex items-center gap-6 text-sm text-gray-500"
+        >
           <span className="flex items-center gap-1">
             <span className="text-[#00D2FF]">&#9679;</span> 12,000+ Listings
           </span>
@@ -129,7 +160,7 @@ export default function HeroSection() {
             <SlidersHorizontal className="h-3.5 w-3.5 text-gray-500" /> AI
             Matched
           </span>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

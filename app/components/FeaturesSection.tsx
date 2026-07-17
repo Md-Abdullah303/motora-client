@@ -1,5 +1,8 @@
+"use client"
+
 import { Zap, Shield, Cpu, Sparkles, Gauge, Globe } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
+import { motion } from "framer-motion"
 
 const features = [
   {
@@ -44,7 +47,13 @@ export default function FeaturesSection() {
   return (
     <section id="features" className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <h2 className="text-3xl font-bold text-white sm:text-4xl">
             Why Choose{" "}
             <span className="text-[#00D2FF]">Motora</span>
@@ -53,12 +62,18 @@ export default function FeaturesSection() {
             Experience the future of car buying with our AI-driven platform
             designed to save you time and money.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <Card
+          {features.map((feature, index) => (
+            <motion.div
               key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+            <Card
               className="group border-white/5 transition-all duration-300 hover:border-[#00D2FF]/20 hover:shadow-lg hover:shadow-[#00D2FF]/5"
             >
               <CardHeader>
@@ -75,6 +90,7 @@ export default function FeaturesSection() {
                 </p>
               </CardContent>
             </Card>
+            </motion.div>
           ))}
         </div>
       </div>
