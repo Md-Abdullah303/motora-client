@@ -5,9 +5,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react"
+import toast from "react-hot-toast"
 import { Button } from "@/app/components/ui/Button"
 import { Input } from "@/app/components/ui/Input"
-import { cn } from "@/app/lib/utils"
 import { authClient } from "@/app/lib/auth-client"
 import loginSidebarImg from "@/app/loginSidebarImg.png"
 
@@ -35,6 +35,7 @@ export default function LoginPage() {
     e.preventDefault()
     setError(null)
     setIsLoading(true)
+    const loadingToast = toast.loading("Signing you in...")
 
     const { error: authError } = await authClient.signIn.email({
       email: formData.email,
@@ -42,13 +43,17 @@ export default function LoginPage() {
       rememberMe: formData.remember,
     })
 
+    toast.dismiss(loadingToast)
     setIsLoading(false)
 
     if (authError) {
-      setError(authError.message || "Invalid email or password.")
+      const message = authError.message || "Invalid email or password."
+      setError(message)
+      toast.error(message)
       return
     }
 
+    toast.success("Welcome back! Login successful.")
     router.push("/")
   }
 

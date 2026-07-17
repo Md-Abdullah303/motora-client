@@ -12,6 +12,7 @@ import {
   EyeOff,
   Loader2,
 } from "lucide-react"
+import toast from "react-hot-toast"
 import { authClient } from "@/app/lib/auth-client"
 
 function getPasswordStrength(password: string): {
@@ -59,16 +60,21 @@ export default function SignUpPage() {
     setError(null)
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.")
+      const msg = "Passwords do not match."
+      setError(msg)
+      toast.error(msg)
       return
     }
 
     if (!formData.agreeTerms) {
-      setError("You must agree to the Terms of Service and Privacy Policy.")
+      const msg = "You must agree to the Terms of Service and Privacy Policy."
+      setError(msg)
+      toast.error(msg)
       return
     }
 
     setIsLoading(true)
+    const loadingToast = toast.loading("Creating your account...")
 
     const { error: authError } = await authClient.signUp.email({
       email: formData.email,
@@ -76,13 +82,17 @@ export default function SignUpPage() {
       name: formData.name,
     })
 
+    toast.dismiss(loadingToast)
     setIsLoading(false)
 
     if (authError) {
-      setError(authError.message || "Something went wrong. Please try again.")
+      const message = authError.message || "Something went wrong. Please try again."
+      setError(message)
+      toast.error(message)
       return
     }
 
+    toast.success("Account created successfully! Welcome aboard.")
     router.push("/")
   }
 
