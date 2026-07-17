@@ -48,6 +48,15 @@ export default function LoginPage() {
     router.push("/")
   }
 
+  const handleGoogleLogin = async () => {
+    const loadingToast = toast.loading("Redirecting to Google...")
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    })
+    toast.dismiss(loadingToast)
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
@@ -272,6 +281,7 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
+              onClick={handleGoogleLogin}
               className="flex items-center justify-center gap-2 h-11 rounded-xl border border-white/10 bg-white/5 text-gray-300 text-sm font-medium hover:bg-white/10 transition-colors"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
