@@ -7,6 +7,7 @@ import Footer from "@/app/components/Footer"
 import { Loader2, ArrowLeft, Calendar, Fuel, Gauge, Check, CreditCard, ShieldCheck, Sparkles } from "lucide-react"
 import { Button } from "@/app/components/ui/Button"
 import { authClient } from "@/app/lib/auth-client"
+import toast from "react-hot-toast"
 
 interface Car {
   _id: string
