@@ -5,6 +5,7 @@ import { authClient } from "@/app/lib/auth-client"
 import { useRouter } from "next/navigation"
 import { User, Phone, MapPin, Mail, UserCircle2, Edit, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { getJwt } from "@/app/actions/getJwt"
 
 interface UserProfile {
   name?: string

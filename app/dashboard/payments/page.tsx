@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ExternalLink, Receipt, ShoppingCart, Loader2 } from "lucide-react"
 import { Button } from "@/app/components/ui/Button"
 import { authClient } from "@/app/lib/auth-client"
+import { getJwt } from "@/app/actions/getJwt"
 
 interface Payment {
   _id: string

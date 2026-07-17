@@ -7,6 +7,7 @@ import { authClient } from "@/app/lib/auth-client"
 import Link from "next/link"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { getJwt } from "@/app/actions/getJwt"
 
 interface UserCar {
   _id: string
@@ -49,7 +50,7 @@ export default function ListingsPage() {
   const fetchMyCars = async (currentPage: number) => {
     setLoading(true)
     try {
-      const token = session?.user?.id ? `user_${session.user.id}` : "anon"
+      const token = await getJwt()
       const query = new URLSearchParams({ page: currentPage.toString(), limit: limit.toString() })
       const res = await fetch(`http://localhost:4000/api/users/me/cars?${query}`, {
         headers: { Authorization: `Bearer ${token}` },

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Loader2, Upload, X, CheckCircle2, ArrowLeft } from "lucide-react"
 import toast from "react-hot-toast"
 import Link from "next/link"
+import { getJwt } from "@/app/actions/getJwt"
 
 const IMGBB_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY || ""
 const GENDERS = ["Male", "Female", "Non-binary", "Prefer not to say"]

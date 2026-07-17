@@ -7,6 +7,7 @@ import Footer from "@/app/components/Footer"
 import { CheckCircle2, Loader2, ArrowRight } from "lucide-react"
 import { Button } from "@/app/components/ui/Button"
 import { authClient } from "@/app/lib/auth-client"
+import { getJwt } from "@/app/actions/getJwt"
 
 function SuccessContent() {
   const searchParams = useSearchParams()

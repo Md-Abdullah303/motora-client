@@ -8,6 +8,7 @@ import { Loader2, ArrowLeft, Calendar, Fuel, Gauge, Check, CreditCard, ShieldChe
 import { Button } from "@/app/components/ui/Button"
 import { authClient } from "@/app/lib/auth-client"
 import toast from "react-hot-toast"
+import { getJwt } from "@/app/actions/getJwt"
 
 interface Car {
   _id: string

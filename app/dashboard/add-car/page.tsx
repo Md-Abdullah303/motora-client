@@ -5,6 +5,7 @@ import { Sparkles, Zap, Upload, X, Loader2, Image as ImageIcon } from "lucide-re
 import styles from "./page.module.css";
 import toast from "react-hot-toast";
 import { authClient } from "@/app/lib/auth-client";
+import { getJwt } from "@/app/actions/getJwt"
 
 export default function AddCarPage() {
   const [formData, setFormData] = useState({
@@ -147,7 +148,7 @@ export default function AddCarPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer user_${session?.user?.id || 'anon'}`
+          "Authorization": `Bearer ${await getJwt()}`
         },
         body: JSON.stringify(payload),
       });

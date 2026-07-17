@@ -12,6 +12,7 @@ import { Button } from "@/app/components/ui/Button"
 import { useEffect } from "react"
 import { authClient } from "@/app/lib/auth-client"
 import Link from "next/link"
+import { getJwt } from "@/app/actions/getJwt"
 
 interface UserCar {
   _id: string
