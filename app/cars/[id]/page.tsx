@@ -87,7 +87,7 @@ export default function CarDetailsPage() {
   const handleStripeCheckout = async () => {
     if (!session?.user?.id) {
       toast.error("Please login to purchase this vehicle")
-      router.push("/auth")
+      router.push("/login")
       return
     }
 
