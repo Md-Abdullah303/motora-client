@@ -9,9 +9,44 @@ import {
   MOCK_CHART_DATA, AI_RECOMMENDED_CARS,
 } from "@/app/lib/mock-data"
 import { Button } from "@/app/components/ui/Button"
+import { useEffect } from "react"
+import { authClient } from "@/app/lib/auth-client"
+
+interface UserCar {
+  _id: string
+  title: string
+  price: number
+  category: string
+  images: string[]
+}
 
 export default function DashboardHome() {
   const [profile, setProfile] = useState({ name: "Alex Johnson", phone: "+1 (555) 123-4567", email: "alex@motora.com" })
+  const [myCars, setMyCars] = useState<UserCar[]>([])
+  const [loadingCars, setLoadingCars] = useState(true)
+  const { data: session } = authClient.useSession()
+
+  useEffect(() => {
+    const fetchMyCars = async () => {
+      try {
+        const token = session?.user?.id ? `user_${session.user.id}` : 'anon'; 
+        const res = await fetch("http://localhost:4000/api/users/me/cars", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        const data = await res.json()
+        if (data.success) {
+          setMyCars(data.data)
+        }
+      } catch (err) {
+        console.error("Failed to fetch my cars:", err)
+      } finally {
+        setLoadingCars(false)
+      }
+    }
+    fetchMyCars()
+  }, [])
 
   return (
     <div className="space-y-8">
@@ -113,34 +148,46 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      {/* AI Recommendations */}
+      {/* My Listings */}
       <div>
         <div className="mb-4 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-[#00D2FF]" />
-          <h2 className="text-lg font-bold text-white dark:text-white light:text-gray-900">AI Smart Recommendations</h2>
+          <Car className="h-5 w-5 text-[#00D2FF]" />
+          <h2 className="text-lg font-bold text-white dark:text-white light:text-gray-900">My Recent Listings</h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {AI_RECOMMENDED_CARS.map((car) => (
-            <div key={car.id} className="group rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 overflow-hidden transition-all hover:border-[#00D2FF]/30">
-              <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-700 dark:from-gray-800 dark:to-gray-700 light:from-gray-200 light:to-gray-100 relative">
-                <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-[#00D2FF]/20 px-2.5 py-0.5 text-[10px] font-semibold text-[#00D2FF] border border-[#00D2FF]/30">
-                  <Sparkles className="h-3 w-3" /> {car.badge}
-                </span>
-              </div>
-              <div className="p-4">
-                <p className="text-[11px] uppercase tracking-widest text-gray-500">{car.category}</p>
-                <h3 className="mt-1 font-semibold text-white dark:text-white light:text-gray-900">{car.title}</h3>
-                <p className="mt-1 text-xs text-gray-500">{car.reason}</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-lg font-bold text-[#00D2FF]">${car.price.toLocaleString()}</span>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    View Details
-                  </Button>
+        
+        {loadingCars ? (
+          <div className="text-gray-400">Loading your cars...</div>
+        ) : myCars.length === 0 ? (
+          <div className="text-gray-500 bg-[#1E293B] p-6 rounded-xl border border-white/5 text-center">
+            You haven't listed any cars yet.
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {myCars.map((car) => (
+              <div key={car._id} className="group rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 overflow-hidden transition-all hover:border-[#00D2FF]/30">
+                <div className="aspect-video bg-gradient-to-br from-gray-800 to-gray-700 dark:from-gray-800 dark:to-gray-700 light:from-gray-200 light:to-gray-100 relative overflow-hidden">
+                  {car.images && car.images[0] ? (
+                    <img src={car.images[0]} alt={car.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="absolute inset-0 flex items-center justify-center text-gray-500">No Image</span>
+                  )}
+                  <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-[#00D2FF]/20 px-2.5 py-0.5 text-[10px] font-semibold text-[#00D2FF] border border-[#00D2FF]/30 backdrop-blur-md">
+                    {car.category}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <h3 className="mt-1 font-semibold text-white dark:text-white light:text-gray-900 line-clamp-1">{car.title}</h3>
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-lg font-bold text-[#00D2FF]">${car.price.toLocaleString()}</span>
+                    <Button variant="ghost" size="sm" className="text-xs">
+                      Edit
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

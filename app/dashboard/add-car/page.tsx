@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Sparkles, Zap, Plus, Upload } from "lucide-react";
+import React, { useState, useRef, DragEvent } from "react";
+import { Sparkles, Zap, Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
 import styles from "./page.module.css";
 import toast from "react-hot-toast";
+import { authClient } from "@/app/lib/auth-client";
 
 export default function AddCarPage() {
   const [formData, setFormData] = useState({
@@ -14,21 +15,87 @@ export default function AddCarPage() {
     category: "Hypercar",
   });
 
-  const [imageUrl, setImageUrl] = useState("");
   const [images, setImages] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [aiText, setAiText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { data: session } = authClient.useSession();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddImage = () => {
-    if (imageUrl.trim() !== "" && images.length < 5) {
-      setImages((prev) => [...prev, imageUrl.trim()]);
-      setImageUrl("");
+  const uploadToImgbb = async (file: File) => {
+    if (images.length >= 5) {
+      toast.error("Maximum 5 images allowed");
+      return;
     }
+    
+    setIsUploading(true);
+    const loadingToast = toast.loading("Uploading image...");
+    
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      
+      const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+      if (!apiKey) throw new Error("ImgBB API key is missing in .env.local");
+
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
+      
+      const data = await res.json();
+      if (data.success) {
+        setImages(prev => [...prev, data.data.url]);
+        toast.success("Image uploaded successfully!", { id: loadingToast });
+      } else {
+        throw new Error(data.error?.message || "Upload failed");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to upload image", { id: loadingToast });
+      console.error(error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const onDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type.startsWith("image/")) {
+        uploadToImgbb(file);
+      } else {
+        toast.error("Please drop an image file");
+      }
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      uploadToImgbb(e.target.files[0]);
+    }
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    setImages(prev => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const handleSubmit = async () => {
@@ -49,6 +116,7 @@ export default function AddCarPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer user_${session?.user?.id || 'anon'}`
         },
         body: JSON.stringify(payload),
       });
@@ -163,26 +231,49 @@ export default function AddCarPage() {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.label}>IMAGE URLS</label>
-              <div className={styles.imageInputRow}>
-                <input
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className={styles.input}
-                  placeholder="https://cdn.motora.io/assets/img_01.jpg"
+              <label className={styles.label}>CAR IMAGES (MAX 5)</label>
+              
+              <div 
+                className={`${styles.dropzone} ${isDragging ? styles.dropzoneActive : ""}`}
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileSelect} 
+                  accept="image/*" 
+                  className="hidden" 
                 />
-                <button type="button" onClick={handleAddImage} className={styles.addButton}>
-                  Add
-                </button>
+                {isUploading ? (
+                  <Loader2 className="h-8 w-8 animate-spin text-[#00f0ff]" />
+                ) : (
+                  <>
+                    <Upload className="h-8 w-8 text-[#00f0ff]" />
+                    <span className={styles.dropzoneText}>Drag & drop an image here</span>
+                    <span className={styles.dropzoneSubtext}>or click to browse from your computer</span>
+                  </>
+                )}
               </div>
 
               <div className={styles.thumbnailGrid}>
                 {[...Array(5)].map((_, i) => (
                   <div key={i} className={styles.thumbnail}>
                     {images[i] ? (
-                      <img src={images[i]} alt={`Preview ${i + 1}`} />
+                      <>
+                        <img src={images[i]} alt={`Uploaded ${i + 1}`} />
+                        <button 
+                          type="button"
+                          className={styles.removeButton}
+                          onClick={() => removeImage(i)}
+                        >
+                          <X size={14} />
+                        </button>
+                      </>
                     ) : (
-                      <Upload size={24} />
+                      <ImageIcon size={24} opacity={0.3} />
                     )}
                   </div>
                 ))}

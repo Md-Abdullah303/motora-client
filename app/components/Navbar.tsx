@@ -12,7 +12,7 @@ import { authClient } from "@/app/lib/auth-client"
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Browse Cars", href: "/#cars" },
+  { label: "Browse Cars", href: "/cars" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Contact", href: "/#contact" },
 ]
@@ -48,7 +48,8 @@ export default function Navbar() {
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/"
-    return pathname.startsWith(href.split("#")[0])
+    if (href.startsWith("/#")) return false // Don't highlight anchor links generally
+    return pathname.startsWith(href)
   }
 
   return (
@@ -64,14 +65,16 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {navLinks
+            .filter((link) => link.href !== "/dashboard" || session)
+            .map((link) => (
             <Link
               key={link.label}
               href={link.href}
               className={cn(
                 "text-sm font-medium transition-colors relative py-1",
                 isActive(link.href)
-                  ? "text-white after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#00D2FF] after:rounded-full"
+                  ? "text-[#00D2FF] font-bold after:absolute after:-bottom-1.5 after:left-0 after:right-0 after:h-[3px] after:bg-[#00D2FF] after:rounded-full after:shadow-[0_0_8px_#00D2FF]"
                   : "text-gray-400 hover:text-white"
               )}
             >
@@ -133,7 +136,9 @@ export default function Navbar() {
         )}
       >
         <div className="flex flex-col gap-1 px-4 py-4">
-          {navLinks.map((link) => (
+          {navLinks
+            .filter((link) => link.href !== "/dashboard" || session)
+            .map((link) => (
             <Link
               key={link.label}
               href={link.href}
@@ -141,7 +146,7 @@ export default function Navbar() {
               className={cn(
                 "rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
                 isActive(link.href)
-                  ? "text-white bg-white/5 border-l-2 border-[#00D2FF]"
+                  ? "text-[#00D2FF] font-bold bg-[#00D2FF]/10 border-l-4 border-[#00D2FF]"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               )}
             >
