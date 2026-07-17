@@ -37,7 +37,7 @@ export default function DashboardHome() {
         })
         const data = await res.json()
         if (data.success) {
-          setMyCars(data.data)
+          setMyCars(data.data.cars || [])
         }
       } catch (err) {
         console.error("Failed to fetch my cars:", err)
