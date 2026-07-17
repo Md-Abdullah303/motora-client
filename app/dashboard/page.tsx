@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Car, DollarSign, TrendingUp, Sparkles, Camera } from "lucide-react"
+import { Car, DollarSign, TrendingUp, ArrowRight } from "lucide-react"
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from "recharts"
@@ -11,6 +11,7 @@ import {
 import { Button } from "@/app/components/ui/Button"
 import { useEffect } from "react"
 import { authClient } from "@/app/lib/auth-client"
+import Link from "next/link"
 
 interface UserCar {
   _id: string
@@ -21,10 +22,10 @@ interface UserCar {
 }
 
 export default function DashboardHome() {
-  const [profile, setProfile] = useState({ name: "Alex Johnson", phone: "+1 (555) 123-4567", email: "alex@motora.com" })
   const [myCars, setMyCars] = useState<UserCar[]>([])
   const [loadingCars, setLoadingCars] = useState(true)
   const [stats, setStats] = useState({ totalCarsListed: 0, totalPaymentsMade: 0, totalSpent: 0 })
+  const [profileData, setProfileData] = useState<{ name?: string; avatar?: string; phone?: string; location?: string }>({})
   const { data: session } = authClient.useSession()
 
   useEffect(() => {
@@ -48,6 +49,15 @@ export default function DashboardHome() {
         const dataStats = await resStats.json()
         if (dataStats.success) {
           setStats(dataStats.data)
+        }
+
+        // Fetch Profile
+        const resProfile = await fetch("http://localhost:4000/api/users/me", {
+          headers: { "Authorization": `Bearer ${token}` }
+        })
+        const dataProfile = await resProfile.json()
+        if (dataProfile.success) {
+          setProfileData(dataProfile.data || {})
         }
       } catch (err) {
         console.error("Failed to fetch dashboard data:", err)
@@ -126,35 +136,46 @@ export default function DashboardHome() {
         </div>
 
         {/* Profile */}
-        <div className="rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 p-5">
-          <h3 className="mb-4 text-sm font-semibold text-white dark:text-white light:text-gray-900">Profile Details</h3>
+        <div className="rounded-xl border border-white/5 bg-[#1E293B] p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-semibold text-white">Profile Details</h3>
+            <Link href="/dashboard/profile/edit">
+              <button className="text-xs text-[#00D2FF] hover:text-white transition-colors flex items-center gap-1">
+                Edit <ArrowRight className="w-3 h-3" />
+              </button>
+            </Link>
+          </div>
           <div className="flex flex-col items-center mb-5">
             <div className="relative mb-3">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#00D2FF] to-[#0055FF] text-2xl font-bold text-white">
-                {profile.name.charAt(0)}
-              </div>
-              <button className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-[#1E293B] text-gray-400 hover:text-white transition-colors">
-                <Camera className="h-3.5 w-3.5" />
-              </button>
+              {profileData.avatar ? (
+                <img src={profileData.avatar} alt="avatar" className="h-20 w-20 rounded-full border-2 border-[#00D2FF]/30 object-cover" />
+              ) : (
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#00D2FF] to-[#0055FF] text-2xl font-bold text-white">
+                  {(profileData.name || session?.user?.name || "U").charAt(0).toUpperCase()}
+                </div>
+              )}
             </div>
           </div>
           <div className="space-y-3">
             {[
-              { label: "Name", value: profile.name },
-              { label: "Email", value: profile.email },
-              { label: "Phone", value: profile.phone },
+              { label: "Name", value: profileData.name || session?.user?.name || "—" },
+              { label: "Email", value: session?.user?.email || "—" },
+              { label: "Phone", value: profileData.phone || "Not set" },
+              { label: "Location", value: profileData.location || "Not set" },
             ].map((f) => (
               <div key={f.label}>
                 <label className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">{f.label}</label>
-                <div className="mt-1 flex h-10 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white dark:text-white light:text-gray-900 light:bg-gray-100 light:border-gray-200">
+                <div className="mt-1 flex h-10 items-center rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-white">
                   {f.value}
                 </div>
               </div>
             ))}
           </div>
-          <Button variant="outline" size="sm" className="mt-4 w-full">
-            Edit Profile
-          </Button>
+          <Link href="/dashboard/profile">
+            <Button variant="outline" size="sm" className="mt-4 w-full">
+              View Full Profile
+            </Button>
+          </Link>
         </div>
       </div>
 

@@ -3,11 +3,12 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, PlusCircle, ListOrdered, CreditCard, X } from "lucide-react"
+import { LayoutDashboard, PlusCircle, ListOrdered, CreditCard, X, User } from "lucide-react"
 import { cn } from "@/app/lib/utils"
 
 const sidebarLinks = [
   { label: "Overview & Profile", href: "/dashboard", icon: LayoutDashboard },
+  { label: "My Profile", href: "/dashboard/profile", icon: User },
   { label: "Add New Car", href: "/dashboard/add-car", icon: PlusCircle },
   { label: "Manage My Listings", href: "/dashboard/listings", icon: ListOrdered },
   { label: "Payment History", href: "/dashboard/payments", icon: CreditCard },
