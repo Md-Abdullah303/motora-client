@@ -1,0 +1,249 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { useParams, useRouter } from "next/navigation"
+import Navbar from "@/app/components/Navbar"
+import Footer from "@/app/components/Footer"
+import { Loader2, ArrowLeft, Calendar, Fuel, Gauge, Check, CreditCard, ShieldCheck, Sparkles } from "lucide-react"
+import { Button } from "@/app/components/ui/Button"
+import toast from "react-hot-toast"
+
+interface Car {
+  _id: string
+  title: string
+  price: number
+  category: string
+  images: string[]
+  shortDescription: string
+  fullDescription: string
+  year?: number
+  mileage?: string
+  fuel?: string
+  createdAt?: string
+}
+
+export default function CarDetailsPage() {
+  const params = useParams()
+  const router = useRouter()
+  const { id } = params
+  
+  const [car, setCar] = useState<Car | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [activeImage, setActiveImage] = useState(0)
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/cars/${id}`)
+        const data = await res.json()
+        
+        if (data.success) {
+          setCar(data.data)
+        } else {
+          toast.error("Car not found")
+        }
+      } catch (err) {
+        console.error("Failed to fetch car:", err)
+        toast.error("Failed to load car details")
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    if (id) {
+      fetchCar()
+    }
+  }, [id])
+
+  const handleDummyPayment = (e: React.FormEvent) => {
+    e.preventDefault()
+    toast.success("Payment system will be implemented soon!", { icon: "🚧" })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col bg-[#0B1120]">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-[#00D2FF]" />
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (!car) {
+    return (
+      <div className="flex min-h-screen flex-col bg-[#0B1120]">
+        <Navbar />
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <h1 className="text-3xl font-bold text-white mb-4">Car Not Found</h1>
+          <Button onClick={() => router.push("/cars")}>Back to Inventory</Button>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-[#0B1120]">
+      <Navbar />
+      
+      <main className="flex-1 pt-24 pb-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          <button 
+            onClick={() => router.push("/cars")}
+            className="flex items-center gap-2 text-gray-400 hover:text-[#00D2FF] transition-colors mb-8 text-sm font-semibold uppercase tracking-wider"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back to Inventory
+          </button>
+
+          <div className="grid lg:grid-cols-3 gap-10">
+            {/* Left: Images & Details */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Image Gallery */}
+              <div className="space-y-4">
+                <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/40 border border-white/5 relative group">
+                  {car.images && car.images[activeImage] ? (
+                    <img 
+                      src={car.images[activeImage]} 
+                      alt={car.title} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-gray-600">No Image Available</div>
+                  )}
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 text-xs font-bold text-[#00D2FF] uppercase tracking-widest">
+                    {car.category}
+                  </div>
+                </div>
+                
+                {car.images && car.images.length > 1 && (
+                  <div className="grid grid-cols-5 gap-4">
+                    {car.images.map((img, idx) => (
+                      <button 
+                        key={idx}
+                        onClick={() => setActiveImage(idx)}
+                        className={`aspect-video rounded-lg overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-[#00D2FF] shadow-[0_0_15px_rgba(0,210,255,0.3)]' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                      >
+                        <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Title & Description */}
+              <div>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">{car.title}</h1>
+                <p className="text-xl text-gray-300 font-medium mb-8 leading-relaxed border-l-4 border-[#00D2FF] pl-4">
+                  {car.shortDescription}
+                </p>
+                
+                <h3 className="text-lg font-bold text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#0055FF]" /> Engineering Specs
+                </h3>
+                <div className="bg-[#1E293B] rounded-xl p-6 border border-white/5 shadow-lg mb-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div className="flex flex-col items-center justify-center p-4 bg-[#0B1120] rounded-lg border border-white/5">
+                      <Calendar className="w-8 h-8 text-[#00D2FF] mb-2" />
+                      <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Year</span>
+                      <span className="text-lg font-bold text-white">{car.year || new Date(car.createdAt || Date.now()).getFullYear()}</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center p-4 bg-[#0B1120] rounded-lg border border-white/5">
+                      <Gauge className="w-8 h-8 text-[#0055FF] mb-2" />
+                      <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Mileage</span>
+                      <span className="text-lg font-bold text-white">{car.mileage || "0 mi"}</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-center p-4 bg-[#0B1120] rounded-lg border border-white/5">
+                      <Fuel className="w-8 h-8 text-purple-500 mb-2" />
+                      <span className="text-xs text-gray-500 font-bold uppercase tracking-widest">Fuel Type</span>
+                      <span className="text-lg font-bold text-white">{car.fuel || "Electric"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-bold text-white uppercase tracking-widest mb-4">Detailed Overview</h3>
+                <div className="prose prose-invert max-w-none text-gray-400 leading-relaxed whitespace-pre-wrap">
+                  {car.fullDescription}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Pricing & Payment Form */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-28 space-y-6">
+                
+                {/* Price Card */}
+                <div className="rounded-2xl bg-gradient-to-b from-[#1E293B] to-[#0B1120] p-1 border border-white/10 shadow-2xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#00D2FF]/10 to-[#0055FF]/10 opacity-50"></div>
+                  <div className="bg-[#0B1120] rounded-xl p-6 relative z-10">
+                    <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Buy Now Price</p>
+                    <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00D2FF] to-[#0055FF] mb-6">
+                      ${car.price.toLocaleString()}
+                    </div>
+                    
+                    <ul className="space-y-3 mb-8">
+                      {["MOTORA Certified Inspection", "Free Global Delivery", "1-Year Premium Warranty", "Secure Escrow Payment"].map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
+                          <Check className="w-5 h-5 text-emerald-400 shrink-0" /> {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Dummy Payment Form */}
+                <div className="rounded-2xl bg-[#1E293B] p-6 border border-white/5 shadow-xl">
+                  <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <CreditCard className="w-5 h-5 text-[#00D2FF]" /> Secure Payment
+                  </h3>
+                  
+                  <form onSubmit={handleDummyPayment} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Cardholder Name</label>
+                      <input type="text" placeholder="John Doe" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors" required />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Card Number</label>
+                      <div className="relative">
+                        <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-[#0B1120] border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors font-mono" required />
+                        <CreditCard className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Expiry</label>
+                        <input type="text" placeholder="MM/YY" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors text-center" required />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">CVC</label>
+                        <input type="password" placeholder="•••" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors text-center font-mono" required />
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4">
+                      <button 
+                        type="submit" 
+                        className="w-full bg-gradient-to-r from-[#00D2FF] to-[#0055FF] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,210,255,0.3)] hover:shadow-[0_0_30px_rgba(0,210,255,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+                      >
+                        <ShieldCheck className="w-5 h-5" /> Proceed to Checkout
+                      </button>
+                      <p className="text-center text-xs text-gray-500 mt-4">
+                        *This is a mock payment form for demonstration purposes.
+                      </p>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  )
+}

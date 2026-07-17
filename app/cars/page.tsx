@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import Link from "next/link"
 import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
 import { Search, Filter, ChevronLeft, ChevronRight, Fuel, Gauge, Calendar, Loader2 } from "lucide-react"
@@ -220,6 +221,12 @@ export default function BrowseCarsPage() {
                               <Fuel className="w-3.5 h-3.5" /> {car.fuel || "N/A"}
                             </div>
                           </div>
+                          
+                          <Link href={`/cars/${car._id}`} className="mt-4 block">
+                            <button className="w-full rounded-lg bg-gradient-to-r from-[#00D2FF]/10 to-[#0055FF]/10 py-2 text-sm font-bold text-[#00D2FF] border border-[#00D2FF]/20 hover:bg-[#00D2FF] hover:text-[#0B1120] transition-all">
+                              VIEW DETAILS
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     ))}
