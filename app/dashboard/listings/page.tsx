@@ -274,7 +274,7 @@ export default function ListingsPage() {
             Next <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Edit Dialog ── */}
       {editCar && (
@@ -346,7 +346,7 @@ export default function ListingsPage() {
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
 
       {/* ── Delete AlertDialog ── */}
@@ -384,7 +384,7 @@ export default function ListingsPage() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )

@@ -389,7 +389,7 @@ export default function AddCarPage() {
             <a href="#" className={styles.draftLink}>Save to Drafts</a>
           </div>
 
-        </div>
+        </motion.div>
 
       </div>
     </div>
