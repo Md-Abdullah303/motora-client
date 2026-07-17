@@ -1,4 +1,5 @@
 import { Car, Mail, Phone, MapPin } from "lucide-react"
+import Image from "next/image"
 
 const footerLinks = {
   company: [
@@ -29,9 +30,8 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <a href="#" className="flex items-center gap-2">
               <Car className="h-6 w-6 text-[#00D2FF]" />
-              <span className="text-xl font-bold tracking-widest text-white">
-                MOTO<span className="text-[#00D2FF]">RA</span>
-              </span>
+              <Image src="/MOTORA.png" alt="MOTORA" width={120} height={40} className="object-contain" />
+
             </a>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-400">
               The AI-powered car marketplace that learns your preferences and

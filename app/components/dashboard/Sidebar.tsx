@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, PlusCircle, ListOrdered, CreditCard, X } from "lucide-react"
 import { cn } from "@/app/lib/utils"
@@ -26,10 +27,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
       >
         <div className="flex h-16 items-center justify-between border-b border-white/5 px-6">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#00D2FF] to-[#0055FF]">
-              <span className="text-xs font-bold text-white">M</span>
-            </div>
-            <span className="text-base font-bold tracking-widest text-white">MOTORA</span>
+            <Image src="/MOTORA.png" alt="MOTORA" width={110} height={32} className="object-contain" />
           </Link>
           <button onClick={onClose} className="text-gray-400 hover:text-white lg:hidden">
             <X className="h-5 w-5" />
