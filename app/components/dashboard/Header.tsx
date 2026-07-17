@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
-  const { theme, toggleTheme } = useTheme()
   const router = useRouter()
   const { data: session } = authClient.useSession()
 
@@ -36,13 +35,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
       <div className="flex-1" />
 
-      <button
-        onClick={toggleTheme}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-gray-400 hover:text-white transition-colors"
-        aria-label="Toggle theme"
-      >
-        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      </button>
+
 
       <div className="flex items-center gap-3 border-l border-white/5 pl-4">
         <div className="hidden sm:block text-right">

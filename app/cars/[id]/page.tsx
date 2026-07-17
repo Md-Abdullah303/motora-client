@@ -6,7 +6,7 @@ import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
 import { Loader2, ArrowLeft, Calendar, Fuel, Gauge, Check, CreditCard, ShieldCheck, Sparkles } from "lucide-react"
 import { Button } from "@/app/components/ui/Button"
-import toast from "react-hot-toast"
+import { authClient } from "@/app/lib/auth-client"
 
 interface Car {
   _id: string
@@ -28,8 +28,9 @@ export default function CarDetailsPage() {
   const { id } = params
   
   const [car, setCar] = useState<Car | null>(null)
-  const [loading, setLoading] = useState(true)
   const [activeImage, setActiveImage] = useState(0)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const { data: session } = authClient.useSession()
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -55,9 +56,40 @@ export default function CarDetailsPage() {
     }
   }, [id])
 
-  const handleDummyPayment = (e: React.FormEvent) => {
-    e.preventDefault()
-    toast.success("Payment system will be implemented soon!", { icon: "🚧" })
+  const handleStripeCheckout = async () => {
+    if (!session?.user?.id) {
+      toast.error("Please login to purchase this vehicle")
+      router.push("/auth")
+      return
+    }
+
+    setIsProcessing(true)
+    const loadingToast = toast.loading("Securely connecting to Stripe...")
+
+    try {
+      const token = `user_${session.user.id}`
+      const res = await fetch("http://localhost:4000/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ carId: car?._id })
+      })
+
+      const data = await res.json()
+
+      if (data.success && data.data.url) {
+        toast.dismiss(loadingToast)
+        window.location.href = data.data.url
+      } else {
+        throw new Error(data.error || "Failed to create checkout session")
+      }
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err.message || "An error occurred", { id: loadingToast })
+      setIsProcessing(false)
+    }
   }
 
   if (loading) {
@@ -194,47 +226,29 @@ export default function CarDetailsPage() {
                   </div>
                 </div>
 
-                {/* Dummy Payment Form */}
+                {/* Stripe Payment Button */}
                 <div className="rounded-2xl bg-[#1E293B] p-6 border border-white/5 shadow-xl">
                   <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                    <CreditCard className="w-5 h-5 text-[#00D2FF]" /> Secure Payment
+                    <CreditCard className="w-5 h-5 text-[#00D2FF]" /> Secure Checkout
                   </h3>
                   
-                  <form onSubmit={handleDummyPayment} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Cardholder Name</label>
-                      <input type="text" placeholder="John Doe" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors" required />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Card Number</label>
-                      <div className="relative">
-                        <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-[#0B1120] border border-white/10 rounded-lg pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors font-mono" required />
-                        <CreditCard className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Expiry</label>
-                        <input type="text" placeholder="MM/YY" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors text-center" required />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">CVC</label>
-                        <input type="password" placeholder="•••" className="w-full bg-[#0B1120] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#00D2FF] transition-colors text-center font-mono" required />
-                      </div>
-                    </div>
-                    
-                    <div className="pt-4">
-                      <button 
-                        type="submit" 
-                        className="w-full bg-gradient-to-r from-[#00D2FF] to-[#0055FF] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(0,210,255,0.3)] hover:shadow-[0_0_30px_rgba(0,210,255,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
-                      >
-                        <ShieldCheck className="w-5 h-5" /> Proceed to Checkout
-                      </button>
-                      <p className="text-center text-xs text-gray-500 mt-4">
-                        *This is a mock payment form for demonstration purposes.
-                      </p>
-                    </div>
-                  </form>
+                  <div className="pt-2">
+                    <button 
+                      onClick={handleStripeCheckout}
+                      disabled={isProcessing}
+                      className="w-full bg-[#635BFF] hover:bg-[#4E44E7] disabled:bg-gray-700 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(99,91,255,0.3)] hover:shadow-[0_0_30px_rgba(99,91,255,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+                    >
+                      {isProcessing ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <ShieldCheck className="w-5 h-5" />
+                      )}
+                      {isProcessing ? "Processing..." : "Pay with Stripe"}
+                    </button>
+                    <p className="text-center text-xs text-gray-500 mt-4 flex items-center justify-center gap-1">
+                      Payments are processed securely by <span className="font-bold text-[#635BFF]">Stripe</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

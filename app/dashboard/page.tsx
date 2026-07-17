@@ -24,28 +24,38 @@ export default function DashboardHome() {
   const [profile, setProfile] = useState({ name: "Alex Johnson", phone: "+1 (555) 123-4567", email: "alex@motora.com" })
   const [myCars, setMyCars] = useState<UserCar[]>([])
   const [loadingCars, setLoadingCars] = useState(true)
+  const [stats, setStats] = useState({ totalCarsListed: 0, totalPaymentsMade: 0, totalSpent: 0 })
   const { data: session } = authClient.useSession()
 
   useEffect(() => {
-    const fetchMyCars = async () => {
+    const fetchDashboardData = async () => {
       try {
         const token = session?.user?.id ? `user_${session.user.id}` : 'anon'; 
-        const res = await fetch("http://localhost:4000/api/users/me/cars", {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
+        
+        // Fetch Cars
+        const resCars = await fetch("http://localhost:4000/api/users/me/cars", {
+          headers: { "Authorization": `Bearer ${token}` }
         })
-        const data = await res.json()
-        if (data.success) {
-          setMyCars(data.data.cars || [])
+        const dataCars = await resCars.json()
+        if (dataCars.success) {
+          setMyCars(dataCars.data.cars || [])
+        }
+
+        // Fetch Stats
+        const resStats = await fetch("http://localhost:4000/api/users/me/stats", {
+          headers: { "Authorization": `Bearer ${token}` }
+        })
+        const dataStats = await resStats.json()
+        if (dataStats.success) {
+          setStats(dataStats.data)
         }
       } catch (err) {
-        console.error("Failed to fetch my cars:", err)
+        console.error("Failed to fetch dashboard data:", err)
       } finally {
         setLoadingCars(false)
       }
     }
-    fetchMyCars()
+    fetchDashboardData()
   }, [])
 
   return (
@@ -59,9 +69,9 @@ export default function DashboardHome() {
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         {[
-          { label: "Total Cars Listed", value: "12", icon: Car, color: "from-cyan-500 to-blue-500" },
-          { label: "Total Spent", value: "$249,980", icon: DollarSign, color: "from-purple-500 to-pink-500" },
-          { label: "Total Earned", value: "$234,980", icon: TrendingUp, color: "from-emerald-500 to-teal-500" },
+          { label: "Total Cars Listed", value: stats.totalCarsListed.toString(), icon: Car, color: "from-cyan-500 to-blue-500" },
+          { label: "Total Spent", value: `$${stats.totalSpent.toLocaleString()}`, icon: DollarSign, color: "from-purple-500 to-pink-500" },
+          { label: "Purchases Made", value: stats.totalPaymentsMade.toString(), icon: TrendingUp, color: "from-emerald-500 to-teal-500" },
         ].map((stat) => {
           const Icon = stat.icon
           return (
