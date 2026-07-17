@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, DragEvent } from "react";
 import { Sparkles, Zap, Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { motion } from "framer-motion";
 import styles from "./page.module.css";
 import toast from "react-hot-toast";
 import { authClient } from "@/app/lib/auth-client";
@@ -191,7 +192,11 @@ export default function AddCarPage() {
       <div className={styles.layoutGrid}>
         
         {/* Left Column: Form Container */}
-        <div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className={styles.header}>
             <div className={styles.subheading}>INVENTORY MANAGEMENT</div>
             <h1 className={styles.heading}>Add New Car</h1>
@@ -323,10 +328,15 @@ export default function AddCarPage() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Right Column: Stacked Modules */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "2rem", marginTop: "8.5rem" }}>
+        {/* Right Column: Uploads & Analysis */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          style={{ display: "flex", flexDirection: "column", gap: "2rem", marginTop: "8.5rem" }}
+        >
           
           {/* AI Module */}
           <div className={styles.glassPanel}>

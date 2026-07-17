@@ -3,6 +3,7 @@
 import { Mail, ArrowRight } from "lucide-react"
 import { Button } from "./ui/Button"
 import { Input } from "./ui/Input"
+import { motion } from "framer-motion"
 
 export default function NewsletterSection() {
   return (
@@ -12,7 +13,13 @@ export default function NewsletterSection() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0F1729] to-[#0B1120] px-6 py-14 sm:px-14 sm:py-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-[#0F1729] to-[#0B1120] px-6 py-14 sm:px-14 sm:py-20"
+        >
           <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#00D2FF]/10 blur-[80px]" />
           <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-[#0055FF]/10 blur-[80px]" />
 
@@ -48,7 +55,7 @@ export default function NewsletterSection() {
               No spam. Unsubscribe anytime. 10,000+ subscribers.
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

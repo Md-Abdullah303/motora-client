@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
+import { motion } from "framer-motion"
 import { Mail, Phone, MapPin, Send, MessageCircle, Clock, Loader2, CheckCircle2 } from "lucide-react"
 import toast from "react-hot-toast"
 
@@ -67,7 +68,12 @@ export default function ContactPage() {
         {/* Hero */}
         <section className="relative overflow-hidden py-20 px-4">
           <div className="absolute inset-0 bg-gradient-to-br from-[#00D2FF]/10 via-transparent to-[#0055FF]/10" />
-          <div className="relative mx-auto max-w-3xl text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative mx-auto max-w-3xl text-center"
+          >
             <span className="inline-block rounded-full border border-[#00D2FF]/30 bg-[#00D2FF]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00D2FF] mb-6">
               Get In Touch
             </span>
@@ -80,21 +86,27 @@ export default function ContactPage() {
             <p className="text-gray-400 text-lg">
               Whether you have a question, a partnership inquiry, or just want to say hello — our team is ready to help.
             </p>
-          </div>
+          </motion.div>
         </section>
 
         {/* Contact Info Cards */}
         <section className="py-12 px-4">
           <div className="mx-auto max-w-5xl grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {CONTACT_INFO.map(({ icon: Icon, title, value, desc }) => (
-              <div key={title} className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 hover:border-[#00D2FF]/20 transition-colors">
+            {CONTACT_INFO.map(({ icon: Icon, title, value, desc }, index) => (
+              <motion.div 
+                key={title} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="rounded-2xl border border-white/5 bg-[#1E293B] p-5 hover:border-[#00D2FF]/20 transition-colors"
+              >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#00D2FF]/20 to-[#0055FF]/20 mb-4">
                   <Icon className="h-5 w-5 text-[#00D2FF]" />
                 </div>
                 <h3 className="font-semibold text-white text-sm mb-1">{title}</h3>
                 <p className="text-[#00D2FF] text-sm font-medium mb-1">{value}</p>
                 <p className="text-xs text-gray-500">{desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>

@@ -1,4 +1,7 @@
+"use client"
+
 import Navbar from "@/app/components/Navbar"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Footer from "@/app/components/Footer"
 import { Shield, Zap, Users, Target, Award, Globe } from "lucide-react"
@@ -37,7 +40,12 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-[#00D2FF]/10 via-transparent to-[#0055FF]/10" />
           <div className="absolute top-20 left-1/4 w-72 h-72 bg-[#00D2FF]/5 rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-[#0055FF]/5 rounded-full blur-3xl" />
-          <div className="relative mx-auto max-w-4xl text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative mx-auto max-w-4xl text-center"
+          >
             <span className="inline-block rounded-full border border-[#00D2FF]/30 bg-[#00D2FF]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00D2FF] mb-6">
               Our Story
             </span>
@@ -50,19 +58,32 @@ export default function AboutPage() {
             <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
               MOTORA was founded on the belief that buying or selling a premium vehicle should be as exciting as the car itself — seamless, intelligent, and utterly premium.
             </p>
-          </div>
+          </motion.div>
         </section>
 
         {/* Stats */}
         <section className="py-12 px-4 border-y border-white/5">
-          <div className="mx-auto max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {STATS.map((s) => (
-              <div key={s.label} className="text-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mx-auto max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-8"
+          >
+            {STATS.map((s, i) => (
+              <motion.div 
+                key={s.label} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="text-center"
+              >
                 <p className="text-3xl font-bold bg-gradient-to-r from-[#00D2FF] to-[#0055FF] bg-clip-text text-transparent">{s.value}</p>
                 <p className="text-sm text-gray-500 mt-1">{s.label}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Mission */}

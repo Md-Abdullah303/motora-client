@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { motion } from "framer-motion"
 import { Car, DollarSign, TrendingUp, ArrowRight } from "lucide-react"
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -72,10 +73,14 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8">
       {/* Page Header */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <h1 className="text-2xl font-bold text-white dark:text-white light:text-gray-900">Overview & Profile</h1>
         <p className="text-sm text-gray-400 dark:text-gray-400 light:text-gray-500">Welcome back! Here&apos;s your dashboard summary.</p>
-      </div>
+      </motion.div>
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
@@ -83,10 +88,16 @@ export default function DashboardHome() {
           { label: "Total Cars Listed", value: stats.totalCarsListed.toString(), icon: Car, color: "from-cyan-500 to-blue-500" },
           { label: "Total Spent", value: `$${stats.totalSpent.toLocaleString()}`, icon: DollarSign, color: "from-purple-500 to-pink-500" },
           { label: "Purchases Made", value: stats.totalPaymentsMade.toString(), icon: TrendingUp, color: "from-emerald-500 to-teal-500" },
-        ].map((stat) => {
+        ].map((stat, index) => {
           const Icon = stat.icon
           return (
-            <div key={stat.label} className="rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 p-5 transition-colors">
+            <motion.div 
+              key={stat.label} 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 p-5 transition-colors"
+            >
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-400 dark:text-gray-400 light:text-gray-500">{stat.label}</p>
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br ${stat.color}`}>
@@ -94,7 +105,7 @@ export default function DashboardHome() {
                 </div>
               </div>
               <p className="mt-3 text-2xl font-bold text-white dark:text-white light:text-gray-900">{stat.value}</p>
-            </div>
+            </motion.div>
           )
         })}
       </div>
@@ -102,7 +113,12 @@ export default function DashboardHome() {
       {/* Chart + Profile Row */}
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Chart */}
-        <div className="rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 p-5 lg:col-span-2">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="rounded-xl border border-white/5 bg-[#1E293B] dark:bg-[#1E293B] light:bg-white light:border-gray-200 p-5 lg:col-span-2"
+        >
           <h3 className="mb-4 text-sm font-semibold text-white dark:text-white light:text-gray-900">Revenue Overview</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -134,10 +150,15 @@ export default function DashboardHome() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
         {/* Profile */}
-        <div className="rounded-xl border border-white/5 bg-[#1E293B] p-5">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="rounded-xl border border-white/5 bg-[#1E293B] p-5"
+        >
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-white">Profile Details</h3>
             <Link href="/dashboard/profile/edit">
@@ -177,11 +198,15 @@ export default function DashboardHome() {
               View Full Profile
             </Button>
           </Link>
-        </div>
+        </motion.div>
       </div>
 
       {/* My Listings */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
         <div className="mb-4 flex items-center gap-2">
           <Car className="h-5 w-5 text-[#00D2FF]" />
           <h2 className="text-lg font-bold text-white dark:text-white light:text-gray-900">My Recent Listings</h2>
@@ -220,7 +245,7 @@ export default function DashboardHome() {
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

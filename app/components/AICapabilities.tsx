@@ -1,4 +1,7 @@
+"use client"
+
 import { Brain, Tag, Sparkles, BarChart3, ShieldCheck, ScanLine } from "lucide-react"
+import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card"
 import { Badge } from "./ui/Badge"
 
@@ -55,7 +58,13 @@ export default function AICapabilities() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <Badge variant="secondary" className="mb-4">
             Powered by Agentic AI
           </Badge>
@@ -66,12 +75,18 @@ export default function AICapabilities() {
             Cutting-edge artificial intelligence that transforms how you
             discover, evaluate, and purchase vehicles.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {capabilities.map((cap) => (
-            <Card
+          {capabilities.map((cap, index) => (
+            <motion.div
               key={cap.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+            <Card
               className="group border-white/5 transition-all duration-300 hover:border-[#0055FF]/20 hover:shadow-lg hover:shadow-[#0055FF]/5"
             >
               <CardHeader className="flex flex-row items-start justify-between">
@@ -89,6 +104,7 @@ export default function AICapabilities() {
                 </p>
               </CardContent>
             </Card>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { Edit3, Trash2, Eye, Car, Loader2, ChevronLeft, ChevronRight, X, AlertTriangle } from "lucide-react"
+import { motion } from "framer-motion"
 import { Button } from "@/app/components/ui/Button"
 import { authClient } from "@/app/lib/auth-client"
 import Link from "next/link"
@@ -140,7 +141,12 @@ export default function ListingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Car className="text-[#00D2FF]" /> Manage My Listings
@@ -152,9 +158,14 @@ export default function ListingsPage() {
             + Add New Car
           </Button>
         </Link>
-      </div>
+      </motion.div>
 
-      <div className="overflow-hidden rounded-xl border border-white/5 bg-[#1E293B]">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="overflow-hidden rounded-xl border border-white/5 bg-[#1E293B]"
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -229,10 +240,15 @@ export default function ListingsPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between rounded-xl border border-white/5 bg-[#1E293B] px-5 py-3">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="flex items-center justify-between rounded-xl border border-white/5 bg-[#1E293B] px-5 py-3"
+      >
         <p className="text-sm text-gray-400">
           Showing {totalCars > 0 ? (page - 1) * limit + 1 : 0}–
           {Math.min(page * limit, totalCars)} of {totalCars} listings
@@ -330,12 +346,17 @@ export default function ListingsPage() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* ── Delete AlertDialog ── */}
       {deleteCar && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
           <div className="w-full max-w-md rounded-2xl border border-red-500/20 bg-[#1E293B] shadow-2xl">
             <div className="px-6 py-6 text-center">
               <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-4">

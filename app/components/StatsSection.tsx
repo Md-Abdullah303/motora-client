@@ -1,4 +1,7 @@
+"use client"
+
 import { Car, Users, Award, TrendingUp } from "lucide-react"
+import { motion } from "framer-motion"
 
 const stats = [
   { icon: Car, value: "12,000+", label: "Cars Listed", color: "#00D2FF" },
@@ -13,9 +16,13 @@ export default function StatsSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#00D2FF]/[0.02] to-transparent" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <div
+          {stats.map((stat, index) => (
+            <motion.div
               key={stat.label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative rounded-xl border border-white/5 bg-[#0F1729]/40 p-6 text-center backdrop-blur-sm transition-all duration-300 hover:border-[#00D2FF]/20 hover:shadow-lg hover:shadow-[#00D2FF]/5"
             >
               <div
@@ -31,7 +38,7 @@ export default function StatsSection() {
                 {stat.value}
               </p>
               <p className="mt-1 text-sm text-gray-400">{stat.label}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
