@@ -36,7 +36,7 @@ export default function DashboardHome() {
         const token = await getJwt(); 
         
         // Fetch Cars
-        const resCars = await fetch("http://localhost:4000/api/users/me/cars", {
+        const resCars = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me/cars\`, {
           headers: { "Authorization": `Bearer ${token}` }
         })
         const dataCars = await resCars.json()
@@ -45,7 +45,7 @@ export default function DashboardHome() {
         }
 
         // Fetch Stats
-        const resStats = await fetch("http://localhost:4000/api/users/me/stats", {
+        const resStats = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me/stats\`, {
           headers: { "Authorization": `Bearer ${token}` }
         })
         const dataStats = await resStats.json()
@@ -54,7 +54,7 @@ export default function DashboardHome() {
         }
 
         // Fetch Profile
-        const resProfile = await fetch("http://localhost:4000/api/users/me", {
+        const resProfile = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me\`, {
           headers: { "Authorization": `Bearer ${token}` }
         })
         const dataProfile = await resProfile.json()

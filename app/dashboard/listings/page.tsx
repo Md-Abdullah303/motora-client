@@ -53,7 +53,7 @@ export default function ListingsPage() {
     try {
       const token = await getJwt()
       const query = new URLSearchParams({ page: currentPage.toString(), limit: limit.toString() })
-      const res = await fetch(`http://localhost:4000/api/users/me/cars?${query}`, {
+      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me/cars?${query}\`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       const data = await res.json()
@@ -94,7 +94,7 @@ export default function ListingsPage() {
     setIsSaving(true)
     try {
       const token = await getJwt()
-      const res = await fetch(`http://localhost:4000/api/cars/${editCar._id}`, {
+      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars/${editCar._id}\`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(editForm),
@@ -120,7 +120,7 @@ export default function ListingsPage() {
     setIsDeleting(true)
     try {
       const token = await getJwt()
-      const res = await fetch(`http://localhost:4000/api/cars/${deleteCar._id}`, {
+      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars/${deleteCar._id}\`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       })

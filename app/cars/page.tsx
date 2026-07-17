@@ -49,7 +49,7 @@ function BrowseCarsContent() {
       if (category !== "All Categories") query.append("category", category)
       if (maxPrice) query.append("maxPrice", maxPrice)
 
-      const res = await fetch(`http://localhost:4000/api/cars?${query.toString()}`)
+      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars?${query.toString()}\`)
       const data = await res.json()
       
       if (data.success) {

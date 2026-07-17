@@ -25,7 +25,7 @@ export default function PaymentsPage() {
     const fetchPayments = async () => {
       try {
         const token = await getJwt()
-        const res = await fetch("http://localhost:4000/api/users/me/payments", {
+        const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me/payments\`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

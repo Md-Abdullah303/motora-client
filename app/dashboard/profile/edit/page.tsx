@@ -35,7 +35,7 @@ export default function EditProfilePage() {
       if (!session?.user?.id) return
       try {
         const token = await getJwt()
-        const res = await fetch("http://localhost:4000/api/users/me", {
+        const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me\`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         const data = await res.json()
@@ -114,7 +114,7 @@ export default function EditProfilePage() {
       }
 
       const token = await getJwt()
-      const res = await fetch("http://localhost:4000/api/users/me", {
+      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/users/me\`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
