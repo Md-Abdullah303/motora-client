@@ -25,7 +25,7 @@ function SuccessContent() {
 
     const verifyPayment = async () => {
       try {
-        const token = `user_${session.user.id}`
+        const token = await getJwt()
         const res = await fetch(`http://localhost:4000/api/payments/verify?session_id=${sessionId}`, {
           headers: {
             "Authorization": `Bearer ${token}`

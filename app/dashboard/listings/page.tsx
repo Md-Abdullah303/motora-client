@@ -92,7 +92,7 @@ export default function ListingsPage() {
 
     setIsSaving(true)
     try {
-      const token = `user_${session.user.id}`
+      const token = await getJwt()
       const res = await fetch(`http://localhost:4000/api/cars/${editCar._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -118,7 +118,7 @@ export default function ListingsPage() {
 
     setIsDeleting(true)
     try {
-      const token = `user_${session.user.id}`
+      const token = await getJwt()
       const res = await fetch(`http://localhost:4000/api/cars/${deleteCar._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },

@@ -32,7 +32,7 @@ export default function DashboardHome() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const token = session?.user?.id ? `user_${session.user.id}` : 'anon'; 
+        const token = await getJwt(); 
         
         // Fetch Cars
         const resCars = await fetch("http://localhost:4000/api/users/me/cars", {

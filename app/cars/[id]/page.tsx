@@ -95,7 +95,7 @@ export default function CarDetailsPage() {
     const loadingToast = toast.loading("Securely connecting to Stripe...")
 
     try {
-      const token = `user_${session.user.id}`
+      const token = await getJwt()
       const res = await fetch("http://localhost:4000/api/create-checkout-session", {
         method: "POST",
         headers: {

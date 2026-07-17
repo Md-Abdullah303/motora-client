@@ -24,7 +24,7 @@ export default function PaymentsPage() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const token = session?.user?.id ? `user_${session.user.id}` : 'anon'
+        const token = await getJwt()
         const res = await fetch("http://localhost:4000/api/users/me/payments", {
           headers: {
             "Authorization": `Bearer ${token}`

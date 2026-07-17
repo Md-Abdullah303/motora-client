@@ -26,7 +26,7 @@ export default function ProfilePage() {
     const fetchProfile = async () => {
       if (!session?.user?.id) return
       try {
-        const token = `user_${session.user.id}`
+        const token = await getJwt()
         const res = await fetch("http://localhost:4000/api/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         })
