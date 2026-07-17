@@ -13,8 +13,9 @@ import { authClient } from "@/app/lib/auth-client"
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Browse Cars", href: "/cars" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Contact", href: "/#contact" },
 ]
 
 export default function Navbar() {
