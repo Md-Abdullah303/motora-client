@@ -28,10 +28,11 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <a href="#" className="flex items-center gap-2">
-              <Car className="h-6 w-6 text-[#00D2FF]" />
-              <Image src="/MOTORA.png" alt="MOTORA" width={120} height={40} className="object-contain" />
-
+            <a href="#" className="flex items-center gap-3">
+              <Image src="/MOTORA.png" alt="MOTORA" width={44} height={44} className="rounded-full object-cover shadow-lg" />
+              <span className="text-xl font-bold tracking-widest text-white">
+                MOTO<span className="text-[#00D2FF]">RA</span>
+              </span>
             </a>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-400">
               The AI-powered car marketplace that learns your preferences and

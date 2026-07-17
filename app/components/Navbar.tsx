@@ -55,8 +55,11 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0B1120]/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <Image src="/MOTORA.png" alt="MOTORA" width={130} height={40} className="object-contain" priority />
+        <Link href="/" className="flex items-center gap-3 shrink-0">
+          <Image src="/MOTORA.png" alt="MOTORA" width={44} height={44} className="rounded-full object-cover shadow-lg" priority />
+          <span className="text-xl font-bold tracking-widest text-white">
+            MOTO<span className="text-[#00D2FF] italic">RA</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}

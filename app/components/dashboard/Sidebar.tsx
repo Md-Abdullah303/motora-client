@@ -26,8 +26,9 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
         )}
       >
         <div className="flex h-16 items-center justify-between border-b border-white/5 px-6">
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <Image src="/MOTORA.png" alt="MOTORA" width={110} height={32} className="object-contain" />
+          <Link href="/dashboard" className="flex items-center gap-3">
+            <Image src="/MOTORA.png" alt="MOTORA" width={36} height={36} className="rounded-full object-cover shadow-lg" />
+            <span className="text-base font-bold tracking-widest text-white">MOTORA</span>
           </Link>
           <button onClick={onClose} className="text-gray-400 hover:text-white lg:hidden">
             <X className="h-5 w-5" />
