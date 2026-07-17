@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
+import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
 import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
@@ -166,11 +167,16 @@ export default function CarDetailsPage() {
               <div className="space-y-4">
                 <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/40 border border-white/5 relative group">
                   {car.images && car.images[activeImage] ? (
-                    <img 
-                      src={car.images[activeImage]} 
-                      alt={car.title} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image 
+                        src={car.images[activeImage]} 
+                        alt={car.title} 
+                        fill
+                        priority
+                        sizes="(max-width: 1024px) 100vw, 66vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
                   ) : (
                     <div className="flex h-full items-center justify-center text-gray-600">No Image Available</div>
                   )}
@@ -187,7 +193,9 @@ export default function CarDetailsPage() {
                         onClick={() => setActiveImage(idx)}
                         className={`aspect-video rounded-lg overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-[#00D2FF] shadow-[0_0_15px_rgba(0,210,255,0.3)]' : 'border-transparent opacity-60 hover:opacity-100'}`}
                       >
-                        <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                        <div className="relative w-full h-full">
+                          <Image src={img} alt={`Thumbnail ${idx}`} fill sizes="20vw" className="object-cover" />
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -366,7 +374,7 @@ export default function CarDetailsPage() {
                 <a key={relCar._id} href={`/cars/${relCar._id}`} className="group rounded-2xl border border-white/5 bg-[#1E293B] overflow-hidden hover:border-[#00D2FF]/30 hover:-translate-y-1 transition-all">
                   <div className="aspect-[16/9] relative overflow-hidden bg-black/30">
                     {relCar.images?.[0] ? (
-                      <img src={relCar.images[0]} alt={relCar.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <Image src={relCar.images[0]} alt={relCar.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="flex h-full items-center justify-center text-gray-600 text-sm">No Image</div>
                     )}

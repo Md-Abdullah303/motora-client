@@ -15,7 +15,7 @@
 
 /* Typography */
 .subheading {
-  color: #00f0ff;
+  color: #00D2FF;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -41,7 +41,8 @@
 
 /* Flat Sleek Containers */
 .glassPanel {
-  background: #1E293B; /* Match dashboard cards */
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 2rem;
@@ -94,9 +95,9 @@
 
 .input {
   width: 100%;
-  background: #02040a;
-  border: 1px solid #101b2b;
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   padding: 0.875rem 1rem;
   color: #ffffff;
   font-size: 0.875rem;
@@ -109,8 +110,8 @@
 }
 
 .input:focus {
-  border-color: #00f0ff;
-  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.2);
+  border-color: #00D2FF;
+  box-shadow: 0 0 0 1px rgba(0, 210, 255, 0.2);
 }
 
 .textarea {
@@ -128,11 +129,11 @@
 
 .dropzone {
   width: 100%;
-  border: 2px dashed #101c2c;
-  border-radius: 8px;
-  padding: 2rem;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2.5rem;
   text-align: center;
-  background: #02040a;
+  background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 1.5rem;
@@ -145,9 +146,9 @@
 }
 
 .dropzone:hover, .dropzoneActive {
-  border-color: #00f0ff;
-  background: rgba(0, 240, 255, 0.05);
-  color: #00f0ff;
+  border-color: #00D2FF;
+  background: rgba(0, 210, 255, 0.05);
+  color: #00D2FF;
 }
 
 .dropzoneText {
@@ -181,7 +182,7 @@
 }
 
 .thumbnail:hover {
-  border-color: #00f0ff;
+  border-color: #00D2FF;
 }
 
 .thumbnail img {
@@ -226,9 +227,9 @@
 
 .aiButton {
   width: 100%;
-  background: #061c37;
-  color: #00f0ff;
-  border: 1px solid #00f0ff;
+  background: rgba(0, 210, 255, 0.1);
+  color: #00D2FF;
+  border: 1px solid rgba(0, 210, 255, 0.3);
   border-radius: 6px;
   padding: 0.875rem;
   font-size: 0.875rem;
@@ -242,8 +243,8 @@
 }
 
 .aiButton:hover {
-  background: rgba(0, 240, 255, 0.1);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+  background: rgba(0, 210, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
 }
 
 /* Summary Module */

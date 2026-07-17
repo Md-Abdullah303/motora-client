@@ -70,10 +70,12 @@ export default function TrendingCars() {
               >
                 <div className="relative h-48 w-full overflow-hidden bg-black/40">
                   {car.images && car.images[0] ? (
-                    <img 
+                    <Image 
                       src={car.images[0]} 
                       alt={car.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-gray-600">No Image</div>

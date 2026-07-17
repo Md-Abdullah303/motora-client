@@ -1,7 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
+import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import Navbar from "@/app/components/Navbar"
 import Footer from "@/app/components/Footer"
 import { Search, Filter, ChevronLeft, ChevronRight, Fuel, Gauge, Calendar, Loader2 } from "lucide-react"
@@ -18,14 +20,16 @@ interface Car {
   createdAt?: string
 }
 
-export default function BrowseCarsPage() {
+function BrowseCarsContent() {
   const [cars, setCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
   
-  // Filter & Pagination State
-  const [search, setSearch] = useState("")
-  const [category, setCategory] = useState("All Categories")
-  const [maxPrice, setMaxPrice] = useState("500000")
+  const searchParams = useSearchParams()
+  
+  // Filter & Pagination State (initialized from URL if present)
+  const [search, setSearch] = useState(searchParams.get("search") || "")
+  const [category, setCategory] = useState(searchParams.get("category") || "All Categories")
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "500000")
   const [sort, setSort] = useState("newest")
   const [page, setPage] = useState(1)
   
@@ -211,10 +215,12 @@ export default function BrowseCarsPage() {
                       <div key={car._id} className="group flex flex-col rounded-xl border border-white/5 bg-[#0e1629] overflow-hidden hover:border-[#00D2FF]/30 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,210,255,0.05)]">
                         <div className="relative aspect-[4/3] overflow-hidden bg-black/40">
                           {car.images && car.images[0] ? (
-                            <img 
+                            <Image 
                               src={car.images[0]} 
                               alt={car.title}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
                             />
                           ) : (
                             <div className="flex h-full items-center justify-center text-gray-600">No Image</div>
@@ -296,5 +302,13 @@ export default function BrowseCarsPage() {
       
       <Footer />
     </div>
+  )
+}
+
+export default function BrowseCarsPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#0B1120]"><Loader2 className="h-8 w-8 animate-spin text-[#00D2FF]" /></div>}>
+      <BrowseCarsContent />
+    </Suspense>
   )
 }

@@ -1,4 +1,5 @@
 import Navbar from "@/app/components/Navbar"
+import Image from "next/image"
 import Footer from "@/app/components/Footer"
 import { Shield, Zap, Users, Target, Award, Globe } from "lucide-react"
 
@@ -12,10 +13,10 @@ const VALUES = [
 ]
 
 const TEAM = [
-  { name: "Alex Mercer", role: "CEO & Co-Founder", avatar: "AM" },
-  { name: "Sarah Chen", role: "CTO & AI Lead", avatar: "SC" },
-  { name: "Marcus Reid", role: "Head of Product", avatar: "MR" },
-  { name: "Priya Sharma", role: "Lead Designer", avatar: "PS" },
+  { name: "Alex Mercer", role: "CEO & Co-Founder", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
+  { name: "Sarah Chen", role: "CTO & AI Lead", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
+  { name: "Marcus Reid", role: "Head of Product", avatar: "https://randomuser.me/api/portraits/men/46.jpg" },
+  { name: "Priya Sharma", role: "Lead Designer", avatar: "https://randomuser.me/api/portraits/women/68.jpg" },
 ]
 
 const STATS = [
@@ -124,8 +125,8 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {TEAM.map((member) => (
                 <div key={member.name} className="rounded-2xl border border-white/5 bg-[#1E293B] p-6 text-center hover:border-[#00D2FF]/20 transition-colors">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00D2FF] to-[#0055FF] flex items-center justify-center text-xl font-bold text-white mx-auto mb-3">
-                    {member.avatar}
+                  <div className="relative w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white/10 hover:border-[#00D2FF]/50 transition-colors">
+                    <Image src={member.avatar} alt={member.name} fill className="object-cover" sizes="80px" />
                   </div>
                   <h3 className="font-semibold text-white text-sm">{member.name}</h3>
                   <p className="text-xs text-gray-500 mt-1">{member.role}</p>

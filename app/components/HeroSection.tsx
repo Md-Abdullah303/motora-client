@@ -1,12 +1,29 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Search, SlidersHorizontal, ArrowRight } from "lucide-react"
 import { Button } from "./ui/Button"
 import { Input } from "./ui/Input"
+import Link from "next/link"
 
-const makes = ["Any Make", "Tesla", "BMW", "Mercedes", "Audi", "Porsche"]
+const categories = ["All Categories", "Hypercar", "Supercar", "Sports Car", "Luxury"]
 
 export default function HeroSection() {
+  const router = useRouter()
+  const [search, setSearch] = useState("")
+  const [category, setCategory] = useState("All Categories")
+  const [priceRange, setPriceRange] = useState("Any Price")
+
+  const handleSearch = () => {
+    let maxPrice = "1000000"
+    if (priceRange === "$20k - $40k") maxPrice = "40000"
+    if (priceRange === "$40k - $60k") maxPrice = "60000"
+    if (priceRange === "$60k - $100k") maxPrice = "100000"
+    if (priceRange === "$100k+") maxPrice = "1000000"
+
+    router.push(`/cars?search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}&maxPrice=${maxPrice}`)
+  }
   return (
     <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden pt-16">
       <div className="pointer-events-none absolute inset-0">
@@ -36,10 +53,12 @@ export default function HeroSection() {
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
-          <Button size="lg" className="gap-2">
-            Browse Cars
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          <Link href="/cars">
+            <Button size="lg" className="gap-2">
+              Browse Cars
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
           <Button variant="outline" size="lg">
             How It Works
           </Button>
@@ -56,15 +75,22 @@ export default function HeroSection() {
                 <Input
                   placeholder="e.g. Tesla Model 3"
                   className="pl-10 text-white placeholder:text-gray-500"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
             </div>
             <div className="flex-1 space-y-2">
-              <label className="text-xs font-medium text-gray-400">Make</label>
-              <select className="flex h-11 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">
-                {makes.map((m) => (
-                  <option key={m} value={m} className="bg-[#0B1120]">
-                    {m}
+              <label className="text-xs font-medium text-gray-400">Category</label>
+              <select 
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="flex h-11 w-full rounded-md border border-white/10 bg-[#0B1120] px-3 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
+              >
+                {categories.map((c) => (
+                  <option key={c} value={c} className="bg-[#0B1120]">
+                    {c}
                   </option>
                 ))}
               </select>
@@ -73,7 +99,11 @@ export default function HeroSection() {
               <label className="text-xs font-medium text-gray-400">
                 Price Range
               </label>
-              <select className="flex h-11 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]">
+              <select 
+                value={priceRange}
+                onChange={(e) => setPriceRange(e.target.value)}
+                className="flex h-11 w-full rounded-md border border-white/10 bg-[#0B1120] px-3 py-2 text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2FF]"
+              >
                 <option className="bg-[#0B1120]">Any Price</option>
                 <option className="bg-[#0B1120]">$20k - $40k</option>
                 <option className="bg-[#0B1120]">$40k - $60k</option>
@@ -81,7 +111,7 @@ export default function HeroSection() {
                 <option className="bg-[#0B1120]">$100k+</option>
               </select>
             </div>
-            <Button className="gap-2 sm:mb-0">
+            <Button onClick={handleSearch} className="gap-2 sm:mb-0">
               <Search className="h-4 w-4" />
               <span className="hidden sm:inline">Search</span>
             </Button>
