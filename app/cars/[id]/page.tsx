@@ -47,7 +47,7 @@ export default function CarDetailsPage() {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars/${id}\`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars/${id}`)
         const data = await res.json()
         
         if (data.success) {
@@ -73,7 +73,7 @@ export default function CarDetailsPage() {
     const fetchRelated = async () => {
       if (!car?.category) return
       try {
-        const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars?category=${encodeURIComponent(car.category)}&limit=4\`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/cars?category=${encodeURIComponent(car.category)}&limit=4`)
         const data = await res.json()
         if (data.success) {
           setRelatedCars(data.data.cars.filter((c: Car) => c._id !== car._id).slice(0, 3))
@@ -97,7 +97,7 @@ export default function CarDetailsPage() {
 
     try {
       const token = await getJwt()
-      const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/create-checkout-session\`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/create-checkout-session`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

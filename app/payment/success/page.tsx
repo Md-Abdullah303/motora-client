@@ -26,7 +26,7 @@ function SuccessContent() {
     const verifyPayment = async () => {
       try {
         const token = await getJwt()
-        const res = await fetch(\`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/payments/verify?session_id=${sessionId}\`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/payments/verify?session_id=${sessionId}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
