@@ -17,7 +17,7 @@ This project is a fully functional, elegant platform dedicated to hypercars and 
   - *AI Chat Assistant:* A 24/7 AI-driven chatbot powered by Gemini that answers queries and helps users find the perfect car.
 - **Secure Stripe Checkout:** Integrated real-time payments with Stripe Elements for a safe and smooth checkout experience.
 - **User Dashboard:** Dedicated dashboard for users to add and manage their listed cars and view their personal analytics and payment history.
-- **Premium UI/UX:** Responsive, accessible, and beautifully themed dark mode interface using Tailwind CSS.
+- **Premium UI/UX:** Fully mobile responsive, accessible, and beautifully themed dark mode interface using Tailwind CSS. Ensures flawless experience across desktop, tablet, and mobile devices.
 
 ## 🧰 Technologies Used
 

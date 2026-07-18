@@ -133,7 +133,7 @@ export default function Navbar() {
       <div
         className={cn(
           "overflow-hidden border-t border-white/5 bg-[#0B1120]/95 backdrop-blur-xl transition-all duration-300 md:hidden",
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[calc(100vh-4rem)] overflow-y-auto opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="flex flex-col gap-1 px-4 py-4">

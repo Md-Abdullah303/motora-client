@@ -137,7 +137,7 @@ export default function HeroSection() {
                 <option className="bg-[#0B1120]">$100k+</option>
               </select>
             </div>
-            <Button onClick={handleSearch} className="gap-2 sm:mb-0">
+            <Button onClick={handleSearch} className="w-full sm:w-auto gap-2 sm:mb-0">
               <Search className="h-4 w-4" />
               <span className="hidden sm:inline">Search</span>
             </Button>

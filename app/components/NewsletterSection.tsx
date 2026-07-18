@@ -38,14 +38,14 @@ export default function NewsletterSection() {
 
             <form
               onSubmit={(e) => e.preventDefault()}
-              className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row"
+              className="mx-auto mt-8 flex max-w-md w-full flex-col gap-3 sm:flex-row"
             >
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1"
+                className="flex-1 w-full"
               />
-              <Button type="submit" className="gap-2">
+              <Button type="submit" className="w-full sm:w-auto gap-2">
                 Subscribe
                 <ArrowRight className="h-4 w-4" />
               </Button>

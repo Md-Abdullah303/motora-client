@@ -1,24 +1,20 @@
 import { Car, Mail, Phone, MapPin } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 const footerLinks = {
   company: [
-    { label: "About Us", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Press", href: "#" },
-    { label: "Blog", href: "#" },
+    { label: "About Us", href: "/about" },
+    { label: "Contact", href: "/contact" },
   ],
-  support: [
-    { label: "Help Center", href: "#" },
-    { label: "Safety", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Privacy Policy", href: "#" },
+  account: [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Login", href: "/login" },
+    { label: "Register", href: "/signup" },
   ],
   marketplace: [
-    { label: "Browse Cars", href: "#" },
-    { label: "Sell Your Car", href: "#" },
-    { label: "Dealer Login", href: "#" },
-    { label: "Mobile App", href: "#" },
+    { label: "Browse Cars", href: "/cars" },
+    { label: "Sell Your Car", href: "/dashboard/add-car" },
   ],
 }
 
@@ -28,12 +24,12 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <a href="#" className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
               <Image src="/MOTORA.png" alt="MOTORA" width={44} height={44} className="rounded-full object-cover shadow-lg" />
               <span className="text-xl font-bold tracking-widest text-white">
                 MOTO<span className="text-[#00D2FF]">RA</span>
               </span>
-            </a>
+            </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-gray-400">
               The AI-powered car marketplace that learns your preferences and
               finds your perfect match. Smart search, instant matches, zero
@@ -62,12 +58,12 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-gray-400 transition-colors hover:text-[#00D2FF]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -75,17 +71,17 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-              Support
+              Account
             </h3>
             <ul className="space-y-2">
-              {footerLinks.support.map((link) => (
+              {footerLinks.account.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-gray-400 transition-colors hover:text-[#00D2FF]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -98,12 +94,12 @@ export default function Footer() {
             <ul className="space-y-2">
               {footerLinks.marketplace.map((link) => (
                 <li key={link.label}>
-                  <a
+                  <Link
                     href={link.href}
                     className="text-sm text-gray-400 transition-colors hover:text-[#00D2FF]"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -115,24 +111,18 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Motora. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a
-              href="#"
+            <Link
+              href="/privacy"
               className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-[#00D2FF]"
             >
               Privacy Policy
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/terms"
               className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-[#00D2FF]"
             >
               Terms of Service
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-1 text-xs text-gray-500 transition-colors hover:text-[#00D2FF]"
-            >
-              Cookies
-            </a>
+            </Link>
           </div>
         </div>
       </div>
